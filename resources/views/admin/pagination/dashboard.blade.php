@@ -15,8 +15,8 @@
                     <td class="person">
                         <img src="{{ asset("$item->avatar") }}" alt="avatar {{ $item->first_name }} {{ $item->last_name }}">
                         <div class="person-description">
-                            <h5>{{ $item->last_name }} {{ $item->first_name }}</h5>
-                            <p>...</p></p>
+                            <p class="fw-bold">{{ $item->last_name }} {{ $item->first_name }}</p>
+                            <p>{{ $item->email }}</p>
                         </div>
                     </td>
                     <td class="id">
@@ -26,7 +26,7 @@
                         <p>{{ $item->office_name }}</p>
                     </td>
                     <td class="position">
-                        <h5>{{ $item->department }}</h5>
+                        <p>{{ $item->department }}</p>
                         <p>{{ $item->position }}</p>
                     </td>
                     <td class="status">

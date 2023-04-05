@@ -71,7 +71,8 @@
         /* GENERAL STYLES */
 
         .pagination{
-            padding: 0 0 20px 0;
+            padding-bottom: 20px;
+            justify-content:center;
         }
 
         .pagination ul{

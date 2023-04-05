@@ -40,11 +40,12 @@ class TimesheetsModel extends Model
         $result = DB::table($this->table)->join('timekeepers', 'timekeepers.id', '=', $this->table.'.timekeeper_id')
         ->join('offices', 'offices.id', '=', 'timekeepers.office_id')
         ->join('employees', 'employees.id', '=', $this->table.'.employee_id')
-        ->select('employees.id', 'employees.first_name', 'employees.last_name', 'office_name',
-            $this->table.'.timekeeper_id', 'timekeeping_at')
+        ->select('employees.id',  $this->table.'.status','employees.first_name', 'employees.last_name', $this->table.'.id as attendance_id', 'office_name',
+            'timekeepers.timekeeper_name', 'timekeeping_at')
+        ->orderByDesc($this->table.'.timekeeping_at')
         ->orderByDesc($this->table.'.id');
 
-        if (isset($condition['office'])) {
+        if (isset($condition['office']) || $condition['office'] != 0) {
             $result = $result->where('offices.id', $condition['office']);
         }
         if (isset($condition['from'])) {
@@ -53,7 +54,7 @@ class TimesheetsModel extends Model
         if (isset($condition['to'])) {
             $result = $result->where('timekeeping_at', '<=', $condition['to'].' 23:59:59');
         }
-        if (isset($condition['status'])) {
+        if (isset($condition['status']) && $condition['status'] != 0) {
             $result = $result->where($this->table.'.status', $condition['status']);
         }
 
@@ -119,5 +120,47 @@ class TimesheetsModel extends Model
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+    }
+
+    public function selectDetailInfoAttendance($condition = null)
+    {
+        if($condition == null) return [];
+        $result = DB::table($this->table)->join('timekeepers', 'timekeepers.id', '=', $this->table.'.timekeeper_id')
+        ->join('offices', 'offices.id', '=', 'timekeepers.office_id')
+        ->join('employees', 'employees.id', '=', $this->table.'.employee_id')
+        ->leftJoin('face_employee_images', 'face_employee_images.employee_id', '=', $this->table.'.employee_id')
+        ->select('employees.id', 'employees.first_name', 'employees.last_name', 'employees.avatar', 'employees.department', 'office_name',
+            'timekeepers.timekeeper_name', 'image_url', 'employees.gender', $this->table.'.status', $this->table.'.face_image', 'timekeeping_at')
+        ->orderByDesc($this->table.'.timekeeping_at')
+        ->orderByDesc($this->table.'.id');
+
+        if (isset($condition['id'])) {
+            $result = $result->where($this->table.'.id', $condition['id']);
+        }
+
+        return $result;
+    }
+
+    public function getDetailInfoAttendance($condition = null)
+    {
+        if($condition == null) return [];
+
+        $result = $this->selectDetailInfoAttendance($condition);
+        return $result == [] ? [] : $result->get();
+    }
+
+    public function updateStatus($data = null)
+    {
+        if($data == null) return;
+
+        DB::table($this->table)
+        ->where('id', $data['id'])
+        ->update(['status' => $data['status']]);
+    }
+
+    public function getCountAttendanceWaitingForConfirm($condition = null)
+    {
+        $result = DB::table($this->table)->select('id')->where('status', 2);
+        return $result->count();
     }
 }

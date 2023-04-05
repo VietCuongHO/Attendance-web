@@ -285,8 +285,8 @@
     .board {
         margin: 30px;
         overflow: hidden;
-        background-color: #fff;
-        border-radius: 8px;
+        // background-color: #fff;
+        // border-radius: 8px;
         img {
             width: 45px;
             height: 45px;
@@ -310,6 +310,8 @@
             text-align: start;
         }
         table {
+            border-collapse: collapse;
+            background-color: #fff;
             border-collapse: collapse;
             tr {
                 border-bottom: 1px solid #eef0f3;

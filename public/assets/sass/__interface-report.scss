@@ -370,8 +370,8 @@
     .board {
         margin: 30px;
         overflow: hidden;
-        background-color: #fff;
-        border-radius: 8px;
+        // background-color: #fff;
+        // border-radius: 8px;
         h5 {
             font-weight: 600;
             font-style: 14px;
@@ -383,6 +383,8 @@
         }
         table {
             border-collapse: collapse;
+            border-collapse: collapse;
+            background-color: #fff;
             tr {
                 border-bottom: 1px solid #eef0f3;
             }

@@ -361,8 +361,8 @@
         #interface .board {
         margin: 30px;
         overflow: auto;
-        background-color: #fff;
-        border-radius: 8px;
+        /* background-color: #fff;
+        border-radius: 8px; */
         }
         #interface .board img {
         width: 45px;
@@ -388,6 +388,8 @@
         }
         #interface .board table {
         border-collapse: collapse;
+        background-color: #fff;
+        border-radius: 8px;
         }
         #interface .board table tr {
         border-bottom: 1px solid #eef0f3;

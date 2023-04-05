@@ -22,7 +22,7 @@
             @foreach ($list as $item)
                 <tr>
                     <td class="name">
-                        <h5>{{ $item->last_name }} {{ $item->first_name }}</h5>
+                        <p class="fw-bold">{{ $item->last_name }} {{ $item->first_name }}</p>
                     </td>
                     <td class="id">
                         <p>{{ $item->id }}</p>

@@ -25,22 +25,10 @@ Route::get('/test', function() {
     dd(Auth::check());
 });
 Route::get('/', function() {
-    return view('admin.login.home-login');
+    $page = 1;
+    return redirect()->route('admin.auth.login');//view('admin.login.home-login', compact('page'));
 });
 
-// Route::group(['prefix' => 'login', 'middleware' => 'loginmiddleware', 'as'=> 'login.'], function ()
-// {
-//     Route::get('/', [LoginController::class, 'index'])->name('home');
-
-//     Route::get('/user', [LoginController::class, 'user'])->name('user');
-//     Route::post('/user', [LoginController::class, 'userLogin'])->name('p_user');
-
-//     Route::get('/admin', [LoginController::class, 'admin'])->name('admin');
-//     Route::post('/admin', [LoginController::class, 'adminLogin'])->name('p_admin');
-
-//     Route::get('/attendance', [LoginController::class, 'attendance'])->name('attendance');
-//     Route::post('/attendance', [LoginController::class, 'attendanceLogin'])->name('p_attendance');
-// });
 Route::group(['prefix' => 'admin', 'middleware' => 'existedloginmiddleware', 'as'=> 'admin.'], function ()
 {
     Route::group(['as' => 'auth.'], function()
@@ -82,6 +70,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loginmiddleware', 'as'=> 'ad
     Route::group(['prefix' => 'attendance', 'as'=> 'attendance.'], function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('list');
         Route::post('/', [AttendanceController::class, 'pagination'])->name('pagination');
+
+        Route::get('/detail/{id?}/', [AttendanceController::class, 'detail'])->name('detail');
+        Route::post('/chage-status', [AttendanceController::class, 'updateStatus'])->name('updateStatus');
 
         Route::get('/exportcsv', [AttendanceController::class, 'exportCsv'])->name('exportcsv');
         Route::get('/exportpdf', [AttendanceController::class, 'exportPdf'])->name('exportpdf');

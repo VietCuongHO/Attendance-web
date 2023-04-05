@@ -18,7 +18,7 @@ body {
 
 #menu {
   background-color: #1E2774;
-  width: 300px;
+  width: 250px;
   height: 100%;
   position: fixed;
   top: 0;
@@ -64,13 +64,13 @@ body {
 }
 
 #interface {
-  width: calc(100% - 300px);
-  margin-left: 300px;
+  width: calc(100% - 250px);
+  margin-left: 250px;
   position: relative;
 }
 #interface .navigation {
   position: fixed;
-  width: calc(100% - 300px);
+  width: calc(100% - 250px);
   display: flex;
   justify-content: flex-end;
   align-items: center;

@@ -73,7 +73,7 @@
                 <div class="board-right">
                     <div class="short form">
                         <label for="name">User Name</label>
-                        <input type="text" name="name" value="{{ $account->name }}">
+                        <input type="text" name="name" value="{{ $account->user_name }}">
                     </div>
                     <div class="form">
                         <label>Role</label>

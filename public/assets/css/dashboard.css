@@ -18,7 +18,7 @@ body {
 
 #menu {
   background-color: #1E2774;
-  width: 300px;
+  width: 250px;
   height: 100%;
   position: fixed;
   top: 0;
@@ -62,18 +62,18 @@ body {
 #menu .items li:hover i, #menu .items li:hover a {
   color: #f3f4f6;
 }
-#menu .items li:nth-child(1) {
+/* #menu .items li:nth-child(1) {
   border-left: 4px solid #fff;
-}
+} */
 
 #interface {
-  width: calc(100% - 300px);
-  margin-left: 300px;
+  width: calc(100% - 250px);
+  margin-left: 250px;
   position: relative;
 }
 #interface .navigation {
   position: fixed;
-  width: calc(100% - 300px);
+  width: calc(100% - 250px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -340,8 +340,8 @@ body {
 #interface .board {
   margin: 30px;
   overflow: hidden;
-  background-color: #fff;
-  border-radius: 8px;
+  /* background-color: #fff;
+  border-radius: 8px; */
 }
 #interface .board img {
   width: 45px;
@@ -354,11 +354,11 @@ body {
   font-weight: 600;
   font-style: 14px;
 }
-#interface .board p {
+/* #interface .board p {
   font-weight: 400;
   font-size: 13px;
   color: #787d8d;
-}
+} */
 #interface .board .person {
   display: flex;
   justify-content: flex-start;
@@ -367,6 +367,8 @@ body {
 }
 #interface .board table {
   border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
 }
 #interface .board table tr {
   border-bottom: 1px solid #eef0f3;
