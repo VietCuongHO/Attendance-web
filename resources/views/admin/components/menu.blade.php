@@ -11,7 +11,7 @@
                 {{-- <span class="position-absolute top-0 start-0 translate-middle p-1 bg-danger border border-light rounded-circle">
                     <span class="visually-hidden"></span>
                 </span> --}}
-                @if (isset($waitConfirm))
+                @if (isset($waitConfirm) && $waitConfirm > 0)
                     <span style="font-size: 10px" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
                         {{ $waitConfirm <= 99 ? $waitConfirm : '99+' }}
                         <span class="visually-hidden">waiting for confirm</span>

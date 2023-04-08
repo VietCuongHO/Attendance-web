@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Attendance;
 use App\Models\EmployeesModel;
 use App\Models\FaceEmployeeImagesModel;
 use App\Models\TimesheetsModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -59,6 +61,7 @@ class AttendanceController extends Controller
             'success' => false,
             'message'   =>  'Nguoi dung khong hop le.'
         ]);
+
         $folderPath = public_path('storage\image-checkin\\');
         $image_parts = explode(";base64,", $request->image);
         $image_type_aux = explode("image/", $image_parts[0]);
@@ -72,6 +75,7 @@ class AttendanceController extends Controller
             'employee_id' => $employee[0]->id,
             'face_image' => $file_name,
             'status' => $request->identity == 'true' ? 1 : 2,
+            'timekeeping_at' => Carbon::now(),
             'timekeeper_id' => 4 //$request->timekeeper_id
         ];
         $attendance->saveAttendance($data);
@@ -81,6 +85,7 @@ class AttendanceController extends Controller
         } else {
             $message = 'ID:' . $employee[0]->id . '| ' . $employee[0]->last_name . ' ' . $employee[0]->first_name . ' da gui yeu cau diem danh.';
         }
+        broadcast(new Attendance($data))->toOthers();
         $data = [
             'success' => true,
             'message'   =>  $message

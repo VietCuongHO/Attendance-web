@@ -112,7 +112,7 @@ class TimesheetsModel extends Model
         DB::table($this->table)->insert([
             'employee_id' => $data['employee_id'],
             'timekeeper_id' => $data['timekeeper_id'],
-            'timekeeping_at' => Carbon::now(),
+            'timekeeping_at' => $data['timekeeping_at'],
             'face_image' => $data['face_image'],
             'status' => $data['status'],
             'created_user' => $data['employee_id'],
