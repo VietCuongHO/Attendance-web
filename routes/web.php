@@ -31,38 +31,16 @@ Route::get('/test', function () {
     dd(Auth::check());
 });
 Route::get('/', function () {
-    return view('admin.login.home-login');
+    return redirect()->route('admin.auth.login');
+    //return view('admin.login.home-login');
 });
-
-// Route::group(['prefix' => 'login', 'middleware' => 'loginmiddleware', 'as'=> 'login.'], function ()
-// {
-//     Route::get('/', [LoginController::class, 'index'])->name('home');
-
-//     Route::get('/user', [LoginController::class, 'user'])->name('user');
-//     Route::post('/user', [LoginController::class, 'userLogin'])->name('p_user');
-
-//     Route::get('/admin', [LoginController::class, 'admin'])->name('admin');
-//     Route::post('/admin', [LoginController::class, 'adminLogin'])->name('p_admin');
-
-//     Route::get('/attendance', [LoginController::class, 'attendance'])->name('attendance');
-//     Route::post('/attendance', [LoginController::class, 'attendanceLogin'])->name('p_attendance');
-// });
 
 Route::group(['middleware' => 'existedloginmiddleware', 'as' => 'admin.'], function () {
     Route::group(['as' => 'auth.'], function () {
         Route::get('login', [AuthController::class, 'login'])->name('login');
         Route::post('login', [AuthController::class, 'checkLogin'])->name('check-login');
-        // Route::get('login', [AuthController::class, 'userLogin'])->name('userlogin');
-        // Route::post('login', [AuthController::class, 'userCheckLogin'])->name('usercheck-login');
     });
 });
-
-// Route::group(['middleware' => 'existedloginmiddleware', 'as' => 'user.'], function () {
-//     Route::group(['as' => 'auth.'], function () {
-//         Route::get('login', [AuthController::class, 'userLogin'])->name('userlogin');
-//         Route::post('login', [AuthController::class, 'userCheckLogin'])->name('usercheck-login');
-//     });
-// });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'loginmiddleware', 'as' => 'admin.'], function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
@@ -145,11 +123,6 @@ Route::group(['prefix' => 'user', 'middleware' => 'userloginmiddleware', 'as' =>
     });
 
     Route::get('profile', [ProfileController::class, 'index'])->name('profile');
-
-    // Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
-    //     Route::get('/', [ProfileController::class, 'index'])->name('');
-    //     Route::post('/', [ProfileController::class, 'pagination'])->name('pagination');
-    // });
 
     Route::group(['prefix' =>'report', 'as' => 'report.'], function () {
         Route::get('/', [UserReportController::class, 'index'])->name('list');

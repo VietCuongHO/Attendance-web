@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Attendance;
 use App\Models\EmployeesModel;
 use App\Models\FaceEmployeeImagesModel;
 use App\Models\TimesheetsModel;
@@ -74,7 +75,7 @@ class AttendanceController extends Controller
             'status' => $request->identity == 'true' ? 1 : 2,
             'timekeeper_id' => 4 //$request->timekeeper_id
         ];
-        $attendance->saveAttendance($data);
+        $id_attendance = $attendance->saveAttendance($data);
 
         if ($request->identity == 'true') {
             $message = 'ID:' . $employee[0]->id . '| ' . $employee[0]->last_name . ' ' . $employee[0]->first_name . ' diem danh thanh cong!!!';
@@ -83,23 +84,15 @@ class AttendanceController extends Controller
         }
         $data = [
             'success' => true,
-            'message'   =>  $message
+            'message'   =>  $message,
         ];
-
+        broadcast(new Attendance($id_attendance))->toOthers();
         return response()->json($data);
     }
 
     //API
     public function ApiGetAttendance(Request $request)
     {
-        // SELECT ts.timekeeper_id, ts.timekeeping_at, ts.face_image, ts.status, date(ts.timekeeping_at) AS 'date', MIN(time(ts.timekeeping_at)) AS 'check-in', MAX(time(ts.timekeeping_at)) AS 'check-out'
-        // FROM `timesheets` as ts
-        // WHERE ts.employee_id = 1 and ts.status = 1
-        // GROUP BY date(ts.timekeeping_at);
-
-        // SELECT epl.start_time, epl.end_time, epl.working_day, epl.join_day, epl.left_day
-        // FROM `employees` as epl
-        // WHERE epl.id = 1
         $employee = new EmployeesModel();
         $timesheets = new TimesheetsModel();
 

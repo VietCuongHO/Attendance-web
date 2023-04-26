@@ -9,6 +9,7 @@ use App\Models\EmployeesModel;
 use App\Models\FaceEmployeeImagesModel;
 use App\Models\NoticesModel;
 use App\Models\OfficesModel;
+use App\Models\TimesheetsModel;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -21,6 +22,7 @@ class StaffController extends Controller
         $employees = new EmployeesModel();
         $notification = new NoticesModel();
         $office = new OfficesModel();
+        $timesheet = new TimesheetsModel();
 
         $perPage = $request->show == null ? 50 : $request->show;
 
@@ -41,8 +43,10 @@ class StaffController extends Controller
 
         $notification = $notification->getNotifications([]);
         $office = $office->getOffices([]);
+        $waitConfirm = $timesheet->getCountAttendanceWithStatus(['status' => 2]);
+
         $page = 'staff';
-        return view('admin.staff', compact('notification', 'list', 'page', 'pagination', 'office', 'condition'));
+        return view('admin.staff', compact('notification', 'waitConfirm', 'list', 'page', 'pagination', 'office', 'condition'));
     }
 
     public function exportCsv(Request $request)

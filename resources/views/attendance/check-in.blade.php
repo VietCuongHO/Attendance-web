@@ -42,7 +42,6 @@
     <p id="url-face-api" hidden>{{ asset('assets/face-api') }}</p>
     <p id="url-image" hidden>{{asset('')}}</p>
 
-    {{-- <video id="video" width="720" height="560" autoplay muted></video> --}}
     <div id="container">
         <div id="alert-div" style="width: 730px;height: 45px;margin-bottom:5vh;">
             <p id="alert-message" style="border-radius: 5px;line-height: 45px;padding-left: 30px;color: white;"></p>
@@ -54,16 +53,6 @@
         </div>
 
         <div id="id-input">
-            {{-- <button id="btn-shot" style="background: none;
-                color: white;
-                font-size: 18px;
-                border: 2px solid;
-                height: 45px;
-                width: 300px;
-                border-radius: 5px;
-                font-weight: 500;
-                margin-bottom:30px">Screenshot
-            </button> --}}
             <button id="btn-inp" style="background: none;
                 color: white;
                 font-size: 18px;
@@ -80,19 +69,7 @@
             </div>
         </div>
     </div>
-    <script>
-
-    </script>
+    <script src="http://localhost:6001/socket.io/socket.io.js"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
 </body>
 </html>
-
-{{-- <div id="alert-div" style="width: 730px;height: 45px;margin-bottom:5vh;background-color: green;border-radius: 5px;">
-    <p id="alert-message" style="border-radius: 5px;line-height: 45px;padding-left: 30px;color: white;display: inline-block;width: 90%;"></p>
-    <button style="
-        display: inline-block;
-        height: 45px;
-        width: 60px;
-        background: none;
-        color: red;
-    ">CANCEL</button>
-</div> --}}

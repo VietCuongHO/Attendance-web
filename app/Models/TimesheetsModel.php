@@ -54,8 +54,11 @@ class TimesheetsModel extends Model
             ->orderByDesc($this->table . '.timekeeping_at')
             ->orderByDesc($this->table . '.id');
 
-        if (isset($condition['office']) || $condition['office'] != 0) {
+        if (isset($condition['office']) && $condition['office'] != 0) {
             $result = $result->where('offices.id', $condition['office']);
+        }
+        if (isset($condition['id']) && $condition['id'] != 0) {
+            $result = $result->where($this->table . '.id', $condition['id']);
         }
         if (isset($condition['from'])) {
             $result = $result->where('timekeeping_at', '>=', $condition['from']);
@@ -208,7 +211,7 @@ class TimesheetsModel extends Model
     public function saveAttendance($data = null)
     {
         if ($data == null) return;
-        DB::table($this->table)->insert([
+        $id = $this->create([
             'employee_id' => $data['employee_id'],
             'timekeeper_id' => $data['timekeeper_id'],
             'timekeeping_at' => Carbon::now(),
@@ -219,7 +222,9 @@ class TimesheetsModel extends Model
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+        return $id->id;
     }
+
     public function searchbyFromTo()
     {
         $result = DB::table($this->table)
@@ -250,9 +255,9 @@ class TimesheetsModel extends Model
         return $result;
     }
 
-    public function getCountAttendanceWaitingForConfirm($condition = null)
+    public function getCountAttendanceWithStatus($condition = null)
     {
-        $result = DB::table($this->table)->select('id')->where('status', 2);
+        $result = DB::table($this->table)->select('id')->where('status', $condition['status']);
         return $result->count();
     }
 

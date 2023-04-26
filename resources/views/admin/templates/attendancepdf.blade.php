@@ -71,9 +71,6 @@
         #menu .items li:hover i, #menu .items li:hover a {
         color: #f3f4f6;
         }
-        /* #menu .items li:nth-child(1) {
-        border-left: 4px solid #fff;
-        } */
 
         #interface {
         width: calc(100% - 300px);
@@ -378,7 +375,6 @@
         #interface .board p {
         font-weight: 400;
         font-size: 13px;
-        color: #787d8d;
         }
         #interface .board .person {
         display: flex;
