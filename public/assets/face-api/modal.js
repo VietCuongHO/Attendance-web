@@ -18,7 +18,7 @@ export const showModal = (
     noBtnLabel,
     callback_Yes,
     callback_No,
-    callback_Close,
+    // callback_Close,
 ) => {
     if (modalWrap !== null) {
         modalWrap.remove();
@@ -71,11 +71,11 @@ export const showModal = (
                     callback_No();
                     break;
                 }
-                case "closeBtn": {
-                    console.log("click close");
-                    callback_Close();
-                    break;
-                }
+                // case "closeBtn": {
+                //     console.log("click close");
+                //     callback_Close();
+                //     break;
+                // }
             }
         };
     });
