@@ -153,7 +153,7 @@ async function faceRecognition(faceMatcher, canvas, displaySize) {
                 },
                 () => {
                     alert("Enter your ID");
-                    RecognitionIntervalID = setInterval(faceRecognition, 3000, faceMatcher, canvas, displaySize);
+                    RecognitionIntervalID = setInterval(faceRecognition, 5000, faceMatcher, canvas, displaySize);
                 },
                 () => {
                     // alert("Wait for timekeeping again");
@@ -173,7 +173,7 @@ async function start() {
     console.log("Training data.");
 
     const labeledFaceDescriptors = await loadLabeledImages();
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
 
     console.log("Completed training.");
 
