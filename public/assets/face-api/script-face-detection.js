@@ -59,7 +59,7 @@ Promise.all([
     faceapi.nets.faceRecognitionNet.loadFromUri(urlModel),
     faceapi.nets.faceLandmark68Net.loadFromUri(urlModel),
     faceapi.nets.ssdMobilenetv1.loadFromUri(urlModel),
-    faceapi.nets.faceExpressionNet.loadFromUri(urlModel)
+    faceapi.nets.faceExpressionNet.loadFromUri(urlModel),
 ]).then(start);
 
 function pause() {
@@ -110,19 +110,88 @@ function loadLabeledImages() {
     );
 }
 
-async function faceDetection() {
-    const canvas = faceapi.createCanvasFromMedia(video);
-    document.body.append(canvas)
-    const displaySize = { width: video.width, height: video.height }
-    faceapi.matchDimensions(canvas, displaySize)
-    setInterval(async () => {
-        const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceExpressions()
-        const resizedDetections = faceapi.resizeResults(detections, displaySize)
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-        faceapi.draw.drawDetections(canvas, resizedDetections)
-        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-        faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
-    }, 100)
+// async function faceDetection() {
+//     const canvas = faceapi.createCanvasFromMedia(video);
+//     document.getElementById("webcam").append(canvas);
+//     const displaySize = { width: video.width, height: video.height };
+//     faceapi.matchDimensions(canvas, displaySize);
+//     setInterval(async () => {
+//         const detections = await faceapi
+//             .detectAllFaces(video)
+//             .withFaceLandmarks()
+//             .withFaceExpressions();
+//         const resizedDetections = faceapi.resizeResults(
+//             detections,
+//             displaySize
+//         );
+//         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+//         faceapi.draw.drawDetections(canvas, resizedDetections);
+//         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+//         faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+//     }, 100);
+// }
+
+async function faceAntiSpoofing(canvas, displaySize) {
+    const rules = ["surprised", "happy", 'nothing'];
+    const detections = await faceapi
+        .detectAllFaces(video)
+        .withFaceLandmarks()
+        .withFaceExpressions();
+    const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+
+    // const result_expression = [];
+
+    // console.log(detections, detections[0].expressions);
+
+    // detections.forEach((d) => {
+    //     let arr = Object.values(d.expressions);
+    //     let max = Math.max(...arr);
+    //     let index = arr.indexOf(max);
+    //     let key = Object.keys(d.expressions);
+    //     // console.log(d,d.expressions);
+    //     // result[key[index]] = max
+    //     result_expression.push(key[index], max);
+    // });
+
+    if (useEmotion(detections) == "happy") {
+        // faceapi.draw.drawDetections(canvas, resizedDetections);
+        // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+        // faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+        console.log("đang vui");
+    }
+    if (useEmotion(detections) == "surprised") {
+        console.log("đang há miệng");
+    }
+    if (useEmotion(detections) == "nothing") {
+        console.log("nothing");
+    }
+    if (useEmotion(detections) == "another") {
+        console.log("another");
+    }
+
+}
+
+function useEmotion(detections) {
+    let result_expression = [];
+    if(detections[0].expressions) {
+        let arr = Object.values(detections[0].expressions);
+        let max = Math.max(...arr);
+        let index = arr.indexOf(max);
+        let key = Object.keys(detections[0].expressions);
+        result_expression.push(key[index], max);
+        if (result_expression[0] == "happy") {
+            return 'happy'
+        }
+        else if (result_expression[0] == "surprised") {
+            return 'surprised'
+        }
+        else {
+            return 'another'
+        }
+    }
+    return 'nothing'
 }
 
 async function faceRecognition(faceMatcher, canvas, displaySize) {
@@ -132,14 +201,9 @@ async function faceRecognition(faceMatcher, canvas, displaySize) {
         .detectAllFaces(video)
         .withFaceLandmarks()
         .withFaceDescriptors();
-    const resizedDetections = faceapi.resizeResults(
-        detections,
-        displaySize
-    );
+    const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-    canvas
-        .getContext("2d")
-        .clearRect(0, 0, canvas.width, canvas.height);
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
 
     const results = resizedDetections.map((d) =>
         faceMatcher.findBestMatch(d.descriptor)
@@ -154,33 +218,46 @@ async function faceRecognition(faceMatcher, canvas, displaySize) {
         console.log(result._distance);
         drawBox.draw(canvas);
         if (result._label != "unknown") {
-            if(RecognitionIntervalID != -1) clearInterval(RecognitionIntervalID);
+            if (RecognitionIntervalID != -1)
+                clearInterval(RecognitionIntervalID);
             var image = getSnapshot();
             showModal(
                 "Face Detecttion",
                 "Please confirm your face?",
+                // displayModal(result._label),
                 "Yes",
                 "No",
                 () => {
                     alert("Attendance success");
                     submitForm(result._label, image, true);
-                    RecognitionIntervalID = setInterval(faceRecognition, 3000, faceMatcher, canvas, displaySize);
+                    RecognitionIntervalID = setInterval(
+                        faceRecognition,
+                        3000,
+                        faceMatcher,
+                        canvas,
+                        displaySize
+                    );
                 },
                 () => {
                     alert("Enter your ID");
-                    RecognitionIntervalID = setInterval(faceRecognition, 7000, faceMatcher, canvas, displaySize);
+                    RecognitionIntervalID = setInterval(
+                        faceRecognition,
+                        7000,
+                        faceMatcher,
+                        canvas,
+                        displaySize
+                    );
                 },
                 () => {
                     // alert("Wait for timekeeping again");
                     // RecognitionIntervalID = setInterval(faceRecognition, 3000, faceMatcher, canvas, displaySize);
                 }
-            )
+            );
         } else {
             alertError("Không xác nhận được người dùng");
         }
     });
 }
-
 
 let i = 0;
 var RecognitionIntervalID = -1;
@@ -194,7 +271,23 @@ async function start() {
 
     startVideo();
 
-    video.addEventListener("playing", faceDetection)
+    // video.addEventListener("playing", faceDetection)
+
+    video.addEventListener("playing", () => {
+        const canvas = faceapi.createCanvasFromMedia(video);
+        document.getElementById("webcam").append(canvas);
+
+        const displaySize = { width: video.width, height: video.height };
+        faceapi.matchDimensions(canvas, displaySize);
+
+        RecognitionIntervalID = setInterval(
+            faceRecognition,
+            3000,
+            faceMatcher,
+            canvas,
+            displaySize
+        );
+    });
 
     // video.addEventListener("playing", () => {
     //     const canvas = faceapi.createCanvasFromMedia(video);
@@ -202,8 +295,7 @@ async function start() {
 
     //     const displaySize = { width: video.width, height: video.height };
     //     faceapi.matchDimensions(canvas, displaySize);
-
-    //     RecognitionIntervalID = setInterval(faceRecognition, 3000, faceMatcher, canvas, displaySize);
+    //     setInterval(faceAntiSpoofing, 6000, canvas, displaySize);
     // });
 
     video.currentTime = 1;
@@ -259,4 +351,7 @@ function alertDisable() {
     document.getElementById("alert-message").textContent = "";
 }
 
+function randomArray(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
 

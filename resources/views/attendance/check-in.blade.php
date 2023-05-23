@@ -53,6 +53,7 @@
     <div id="container">
         <div id="alert-div" style="width: 730px;height: 45px;margin-bottom:5vh;">
             <p id="alert-message" style="border-radius: 5px;line-height: 45px;padding-left: 30px;color: white;"></p>
+            {{-- <p id="timer" style="line-height: 45px;padding-right: 30px"></p> --}}
         </div>
 
         <div id="webcam">

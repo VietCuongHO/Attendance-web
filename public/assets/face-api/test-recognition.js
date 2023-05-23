@@ -69,7 +69,7 @@ async function start() {
     console.log("Training data...")
     const labeledFaceDescriptors = await loadLabeledImages();
     console.log("Completed training.")
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.5);
 
     document.getElementById('btn-start').onclick = startTest(faceMatcher);
 }
